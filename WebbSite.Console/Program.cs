@@ -26,33 +26,12 @@ public static class Program
 
         var serviceProvider = services.BuildServiceProvider();
         
-
-        // var db = new StockContext();
-        // await db.Database.MigrateAsync();
-
-        // Con.WriteLine("Checking if StockCode 5 exists...");
-
-        // var existCount = await (from s in db.Stock
-        //                         where s.StockCode == 5
-        //                         select s).CountAsync();
-
-        // if (existCount > 0)
-        // {
-        //     Con.WriteLine("StockCode 5 already exists.");
-        // }
-        // else
-        // {
-        //     db.Stock.Add(new Stock() { StockCode = 5 });
-        //     await db.SaveChangesAsync();
-        // }
-
-        // WebbSiteClient client = new WebbSiteClient();
-        // var records = await client.GetCCASSAsync(5);
-
-        // DbService dbService = new DbService(db);
-        // await dbService.SaveCCASSRecordsAsync(5, records);
-
-        // Con.WriteLine("Done.");
+        using (var dbScope = serviceProvider.CreateScope())
+        {
+            var sp = dbScope.ServiceProvider;
+            var db = sp.GetRequiredService<StockContext>();
+            await db.Database.MigrateAsync();
+        }
 
         using (var scope = serviceProvider.CreateScope())
         {

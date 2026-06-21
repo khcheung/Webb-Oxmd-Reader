@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="WebbSite.Common/WebbSite.Common.csproj" />
+  <Project Path="WebbSite.Console/WebbSite.Console.csproj" />
+</Solution>

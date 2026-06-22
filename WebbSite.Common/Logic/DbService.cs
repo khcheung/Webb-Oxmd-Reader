@@ -33,6 +33,12 @@ public class DbService(StockContext stockContext)
             await stockContext.SaveChangesAsync();  
             //throw new Exception($"Stock with StockCode {stockCode} not found.");
         }
+
+        if (!records.Any())
+        {
+            Console.WriteLine($"No records to save for stock code {stockCode}.");
+            return;
+        }
         
 
         var minRecordDate = records.Min(r => r.Date);

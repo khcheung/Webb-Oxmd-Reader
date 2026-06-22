@@ -120,6 +120,11 @@ public class ConsoleService(IServiceProvider serviceProvider)
             case "Get Update From 0xmd":
                 var client = serviceProvider.GetRequiredService<WebbSiteClient>();
                 var newRecords = await client.GetCCASSAsync(stockCode);
+                if (newRecords == null || !newRecords.Any())
+                {
+                    AnsiConsole.MarkupLine($"[yellow]No new records found for stock code {stockCode} from 0xmd.[/]");
+                    return;
+                }
                 await dbService.SaveCCASSRecordsAsync(stockCode, newRecords);
                 AnsiConsole.MarkupLine($"[green]Updated records for stock code {stockCode} from 0xmd.[/]");
 

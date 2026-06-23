@@ -9,6 +9,8 @@ public class WebbSiteClient : IDisposable
     private HttpClient client { get; set; } = null!;
     private HttpClientHandler handler { get; set; } = null!;
 
+    private Boolean isFirst = true;
+
     public WebbSiteClient()
     {
         this.CreateClient();
@@ -22,6 +24,7 @@ public class WebbSiteClient : IDisposable
         client = new HttpClient(handler);
         client.BaseAddress = new Uri(BaseUrl);
 
+        client.DefaultRequestHeaders.Clear();
         client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Linux)");
     }
 
@@ -29,7 +32,23 @@ public class WebbSiteClient : IDisposable
     {
         var result = new List<CCASSRecord>();
         var path = $"/ccass/cconchist.asp?sc={stockCode}";
-        using (var response = await client.GetAsync(path))
+
+        HttpRequestMessage req = null!;
+        if (isFirst)
+        {
+            req = new HttpRequestMessage(HttpMethod.Get, path)
+            {
+                Version = HttpVersion.Version30,
+                VersionPolicy = HttpVersionPolicy.RequestVersionOrLower
+            };
+        }
+        else
+        {
+            req = new HttpRequestMessage(HttpMethod.Get, path);
+        }
+
+        //using (var response = await client.GetAsync(path))
+        using (var response = await client.SendAsync(req))
         {
             var content = await response.Content.ReadAsStringAsync();
             //Console.WriteLine(content);

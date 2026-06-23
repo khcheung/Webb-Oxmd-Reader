@@ -66,11 +66,17 @@ public class ConsoleService(IServiceProvider serviceProvider)
 
     private async Task ProcessLoadDBRecord()
     {
-        var stockCodeInput = AnsiConsole.Ask<string>("Enter a [blue]stock code[/] to load from DB:");
+        var stockCodeInput = AnsiConsole.Ask<string>("Enter a [blue]stock code[/] to load from DB: (0 => Back to Main Menu)");
 
         if (!int.TryParse(stockCodeInput, out int stockCode))
         {
             Spectre.Console.AnsiConsole.MarkupLine("[red]Invalid stock code. Please enter a valid integer.[/]");
+            return;
+        }
+
+        if (stockCode <= 0)
+        {            
+            State = StateEnum.MainMenu;
             return;
         }
 

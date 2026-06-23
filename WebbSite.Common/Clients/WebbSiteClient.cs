@@ -41,6 +41,8 @@ public class WebbSiteClient : IDisposable
                 Version = HttpVersion.Version30,
                 VersionPolicy = HttpVersionPolicy.RequestVersionOrLower
             };
+
+            isFirst = false;
         }
         else
         {
